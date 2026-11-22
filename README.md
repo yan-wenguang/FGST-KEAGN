@@ -1,5 +1,7 @@
 # FGST-KEAGN
 
+**中文** | [English](README.en.md)
+
 两阶段森林火灾风险预测框架的核心算法实现：**FGAT-FS** 特征选择与 **LLM-KEAGN** 知识增强自适应门控。
 
 仓库维护者：[yan-wenguang](https://github.com/yan-wenguang)。
