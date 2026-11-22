@@ -1,7 +1,7 @@
-# Citation guidance
+# 引用指引
 
-Repository: FGST-KEAGN. Maintainer: [yan-wenguang](https://github.com/yan-wenguang). URL: https://github.com/yan-wenguang/FGST-KEAGN.
+仓库：FGST-KEAGN。维护者：[yan-wenguang](https://github.com/yan-wenguang)。地址：https://github.com/yan-wenguang/FGST-KEAGN。
 
-When referencing the code, record the exact Git revision and access date. A finalized paper title, venue, DOI and formal bibliography have not been supplied, so no paper citation is invented. The public repository now includes the two-stage core implementation, while five processed research CSV files are distributed; raw inputs and the full experiment archive are not distributed.
+引用代码时，请记录准确的 Git 版本和访问日期。尚未提供最终论文标题、发表场所、DOI 和正式参考文献，因此不虚构论文引用。本仓库包含两阶段核心实现和五份处理后的研究 CSV；未公开原始输入和完整实验归档。
 
-Processed research inputs: see [RESEARCH_DATA.md](RESEARCH_DATA.md).
+处理后的研究输入详见 [RESEARCH_DATA.md](RESEARCH_DATA.md)。

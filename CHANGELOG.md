@@ -1,18 +1,18 @@
-# Changelog
+# 更新日志
 
-## Processed research data release
+## 处理后研究数据发布
 
-- Added five processed research CSV inputs without modifying their bytes.
-- Added data checksums, field/label/row inventories and numeric completeness scans.
-- Added a primary processed-data execution configuration and updated availability statements.
+- 添加五份处理后的研究 CSV 输入，保留原始文件字节。
+- 添加数据校验码、字段、标签和行数清单，以及数值完整性扫描结果。
+- 添加主数据运行配置，更新数据可用性说明。
 
-## Core algorithm release
+## 核心算法发布
 
-- Added the original FGAT-FS and LLM-KEAGN models, graph operations, losses, knowledge provider, trainers and stage runners.
-- Added a synthetic configuration for executing both research stages.
-- Updated README and repository documentation to describe the actual algorithm availability.
-- Preserved the manuscript overview quotes and sole-maintainer Git metadata.
+- 添加原始 FGAT-FS 和 LLM-KEAGN 模型、图操作、损失函数、知识提供器、训练器及各阶段运行入口。
+- 添加用于运行两个研究阶段的合成数据配置。
+- 更新 README 和仓库文档，说明实际公开的算法内容。
+- 保留论文概述及仅由仓库维护者署名的 Git 元数据。
 
-## Earlier supporting release
+## 早期辅助工具发布
 
-Added CSV/schema/splitting/evaluation/I/O utilities, independently generated synthetic data and a conventional logistic-regression example. Earlier validation evidence covers those auxiliary components.
+添加 CSV、结构校验、数据划分、评估和输入输出工具，以及独立生成的合成数据和常规逻辑回归示例。早期验证证据覆盖这些辅助组件。

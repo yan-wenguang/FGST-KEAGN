@@ -1,51 +1,51 @@
-# Binary Evaluation Contract
+# 二分类评估约定
 
-Contract version: **1.0**. Entry point: `fgst_keagn_support.utils.metrics.compute_binary_metrics`.
+约定版本：**1.0**。入口：`fgst_keagn_support.utils.metrics.compute_binary_metrics`。
 
-## Valid inputs
+## 有效输入
 
-- Truth labels are a nonempty one-dimensional finite numeric array. Boolean labels are accepted.
-- Values must belong entirely to either `{0, 1}` or `{-1, +1}`. Signed labels are normalized explicitly. Mixed encodings, unsupported values, missing labels, strings and complex values are rejected.
-- Predicted probabilities are a one-dimensional array of the same length, with finite real numeric values in `[0, 1]`. Boolean or string probability arrays are rejected.
-- The threshold is a finite real scalar in `[0, 1]`. Prediction uses `probability >= threshold` for the positive class.
-- The caller must supply the probability of the class encoded as positive after normalization. The conventional example uses `predict_proba(X)[:, 1]` for classes 0/1.
+- 真实标签必须为非空、一维、有限数值数组，也接受布尔标签。
+- 标签必须全部属于 `{0, 1}` 或 `{-1, +1}` 中的一种编码；带符号的标签会被明确归一化。拒绝混合编码、不支持的值、缺失标签、字符串和复数。
+- 预测概率必须为长度相同的一维数组，包含 `[0, 1]` 范围内的有限实数。拒绝布尔型或字符串型概率数组。
+- 阈值必须为 `[0, 1]` 范围内的有限实数标量。`probability >= threshold` 时预测为正类。
+- 调用方必须提供归一化后正类的概率。对于 0/1 类别，常规示例使用 `predict_proba(X)[:, 1]`。
 
-No labels or failed predictions are silently repaired. A score from `decision_function` is not interchangeable with a probability in this particular helper, even though some ranking APIs accept unrestricted decision scores.
+不会静默修复标签或失败的预测。在此辅助函数中，`decision_function` 的分数不能替代概率，尽管部分排序接口接受范围不受限制的决策分数。
 
-## Values and validity statuses
+## 指标值与有效性状态
 
-Each result includes seven metric values, a `status` mapping, `support` counts and a `confusion_matrix` containing TP, TN, FP and FN. Undefined metrics are Python `None` / JSON `null`; they must not be averaged as ordinary numerical observations.
+每个结果包含七个指标值、`status` 状态映射、`support` 样本计数，以及包含 TP、TN、FP、FN 的 `confusion_matrix`。未定义的指标以 Python `None` / JSON `null` 表示，不能将其作为普通数值参与平均。
 
-| Metric | Definition | Undefined condition |
+| 指标 | 定义 | 未定义条件 |
 |---|---|---|
-| `roc_auc` | scikit-learn binary ROC-AUC | Either true class absent |
-| `average_precision` | Noninterpolated sum of precision weighted by recall increments | No positive truth |
-| `accuracy` | (TP + TN) / n | None after nonempty input validation |
-| `precision` | TP / (TP + FP) | No predicted positives |
-| `recall` | TP / (TP + FN) | No positive truth |
-| `f1` | 2TP / (2TP + FP + FN) | Denominator zero |
-| `mcc` | (TP*TN - FP*FN) / sqrt((TP+FP)(TP+FN)(TN+FP)(TN+FN)) | Denominator zero |
+| `roc_auc` | scikit-learn 二分类 ROC-AUC | 真实标签缺少任一类别 |
+| `average_precision` | 以召回率增量为权重，对精确率进行非插值加权求和 | 真实标签无正类 |
+| `accuracy` | (TP + TN) / n | 通过非空输入校验后无未定义情况 |
+| `precision` | TP / (TP + FP) | 无预测正类 |
+| `recall` | TP / (TP + FN) | 真实标签无正类 |
+| `f1` | 2TP / (2TP + FP + FN) | 分母为零 |
+| `mcc` | (TP*TN - FP*FN) / sqrt((TP+FP)(TP+FN)(TN+FP)(TN+FN)) | 分母为零 |
 
-All-positive truth can have average precision 1, while ROC-AUC remains undefined. When a mixed-class set has no predicted positives, precision and MCC are undefined, but recall and F1 are defined as zero. Validity is evaluated per metric rather than with a blanket single-class fallback.
+真实标签全部为正类时，平均精确率可以为 1，但 ROC-AUC 仍未定义。对于包含两个真实类别的数据，如果没有预测正类，精确率和 MCC 未定义，而召回率和 F1 定义为零。有效性按各指标分别判断，不使用统一的单类别回退值。
 
-**Average precision is not the trapezoidal area under a precision-recall curve.** The former `pr_auc` name is replaced by `average_precision`; `auc` is replaced by `roc_auc`. This is an intentional API change, not a reinterpretation of historical study results.
+**平均精确率不等同于精确率—召回率曲线下的梯形积分面积。** 原来的 `pr_auc` 名称已替换为 `average_precision`，`auc` 已替换为 `roc_auc`。这是有意的 API 变更，不是对历史研究结果的重新解释。
 
-Status reason values are `defined`, `requires_both_true_classes`, `no_positive_truth`, `no_predicted_positives`, `zero_f1_denominator` and `zero_mcc_denominator`.
+状态原因值包括 `defined`、`requires_both_true_classes`、`no_positive_truth`、`no_predicted_positives`、`zero_f1_denominator` 和 `zero_mcc_denominator`。
 
-## Data and field safety
+## 数据与字段安全
 
-`infer_schema` rejects missing labels, missing context references, duplicate column names and the label as context. CSV headers are checked before pandas can rename duplicate columns. The example's baseline input list must be nonempty, unique and a subset of declared static, non-label features; context is deliberately excluded.
+`infer_schema` 拒绝缺失标签、缺失上下文引用、重复列名，以及将标签作为上下文。CSV 表头会在 pandas 自动改写重复列名之前检查。示例的基线输入列表必须非空且无重复，并且是已声明的静态非标签特征的子集；上下文被明确排除。
 
-These boundary checks prevent the previously identified label-as-feature configuration error in the public example. They are not a substitute for reviewing semantic leakage or dependence in a real research dataset.
+这些边界检查防止公开示例中此前发现的“将标签作为特征”配置错误，不能替代对真实研究数据中语义泄漏或依赖关系的审查。
 
-## Serialization and related helpers
+## 序列化与相关工具
 
-`save_json` validates standard JSON serialization with `allow_nan=False` before opening the output file, so invalid numeric payloads do not truncate an existing target. This is not an atomic-write or crash-recovery guarantee. Payloads must use standard JSON-compatible Python values; callers should convert NumPy-specific values explicitly.
+`save_json` 在打开输出文件之前，通过 `allow_nan=False` 验证标准 JSON 序列化，避免无效数值内容截断现有目标文件。这不保证原子写入或故障恢复。内容必须使用兼容标准 JSON 的 Python 值；调用方应明确转换 NumPy 专用值。
 
-`stable_softmax` accepts a nonempty finite real one-dimensional numeric array, converts integer inputs to floating point, subtracts its maximum and normalizes exponentials. Very small weights may underflow to zero. It is not a multidimensional tensor softmax API.
+`stable_softmax` 接受非空、有限实数、一维数值数组，将整数输入转换为浮点数，减去最大值后计算指数并归一化。极小的权重可能下溢为零。该函数不是多维张量 softmax 接口。
 
-## Evidence and scope
+## 验证证据与范围
 
-Tests cover known nonperfect rankings, invalid-input rejections, per-metric undefined conditions, confusion counts and the synthetic baseline. This validates the selected public helper behavior, not the private FGST-KEAGN evaluator or paper results.
+测试覆盖已知的非完美排序、无效输入拒绝、各指标未定义条件、混淆矩阵计数和合成数据基线。这验证的是所选公开辅助函数的行为，不是私有 FGST-KEAGN 评估器或论文结果。
 
-References: [average precision](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.average_precision_score.html), [ROC-AUC](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.roc_auc_score.html).
+参考：[平均精确率](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.average_precision_score.html)、[ROC-AUC](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.roc_auc_score.html)。

@@ -1,23 +1,23 @@
-# Core implementation and execution contract
+# 核心实现与运行约定
 
-The core Python files are copied from the supplied `new_data` project. Algorithm formulas and training logic are preserved. The public run configuration uses the existing synthetic fixture, small model dimensions and three epochs; it is separate from private experiment settings.
+核心 Python 文件复制自所提供的 `new_data` 项目，保留算法公式和训练逻辑。公开运行配置使用现有合成数据、较小的模型维度和三个训练轮次，与私有实验配置分别管理。
 
-## Stage one
+## 第一阶段
 
-Feature relations combine normalized mutual information, absolute correlation and classification synergy. The synergy implementation fits logistic regression on training rows and evaluates on those same training rows; the parameter named `synergy_cv_max_iter` sets iterations, not cross-validation. Attention-derived and embedding-derived scores form a soft feature mask. Redundancy-aware greedy selection uses validation AUC. Validation chooses checkpoints and feature subsets. Stage-one subset metrics may refit logistic regression on train plus validation rows.
+特征关系融合归一化互信息、绝对相关性和分类协同信息。分类协同的实现是在训练行上拟合逻辑回归，并在同一批训练行上评估；`synergy_cv_max_iter` 参数设置的是迭代次数，不是交叉验证。由注意力和嵌入计算的评分共同形成软特征掩码。考虑冗余的贪心选择使用验证集 AUC，验证集用于选择检查点和特征子集。第一阶段的子集指标可能使用训练集与验证集合并后的数据重新拟合逻辑回归。
 
-## Stage two
+## 第二阶段
 
-Training-row means and standard deviations normalize inputs. Feature cards and local JSON priors feed the knowledge branch. Missing JSON entries fall back to feature-label correlations. Data/knowledge weights and context embeddings determine the gate and prediction. Validation AUC selects the checkpoint; outputs contain test probabilities and feature weights. There is no online LLM invocation in the current source.
+使用训练行的均值和标准差归一化输入。特征卡片与本地 JSON 先验作为知识分支输入。缺失的 JSON 条目回退为特征与标签的相关性。数据权重、知识权重和上下文嵌入共同决定门控及预测。验证集 AUC 用于选择检查点，输出包含测试概率和特征权重。当前源码不在线调用大语言模型。
 
-## Input and outputs
+## 输入与输出
 
-Inputs are a numeric CSV, binary label column, explicit numeric context columns and a YAML configuration. Use positive ratios summing to one, sufficient examples of both classes and feature bounds compatible with the number of columns. Core modules use `src.*` imports from the repository root. Python 3.10+ is required because the original code uses `zip(..., strict=True)`.
+输入包括数值型 CSV、二分类标签列、明确指定的数值型上下文列和 YAML 配置。划分比例应均为正且总和为一，两个类别均应有足够样本，特征数量上下界应与列数匹配。核心模块从仓库根目录使用 `src.*` 导入路径。原始代码使用 `zip(..., strict=True)`，因此要求 Python 3.10 及以上版本。
 
-The full runner passes stage one's selected-feature file into stage two. It writes models, relation matrices, histories, per-row predictions, feature weights and aggregate reports under the configured artifacts directories. These local generated outputs are ignored by Git.
+完整运行入口将第一阶段生成的特征选择文件传入第二阶段，并在配置指定的产物目录中保存模型、关系矩阵、训练历史、逐行预测、特征权重和汇总报告。Git 会忽略这些本地生成文件。
 
-## Evaluation limits
+## 评估限制
 
-The core evaluator is retained from the original project: it maps positive labels to 1, substitutes nonfinite probabilities, uses fallback AUC for single-class truth and calls average precision `pr_auc`. This differs from the stricter auxiliary evaluator in `fgst_keagn_support`; the auxiliary evaluator's documented invalid-input and null-value contract does not apply to core metrics.
+核心评估器保留原项目实现：将正值标签映射为 1，替换非有限预测概率，对单类别真实标签使用回退 AUC，并以 `pr_auc` 命名平均精确率。这与 `fgst_keagn_support` 中更严格的辅助评估器不同；辅助评估器关于无效输入和空值的约定不适用于核心指标。
 
-Random row stratification does not establish temporal, spatial or event-disjoint generalization. Running the core algorithm on synthetic data verifies software execution, not paper performance or scientific claims.
+按行随机分层划分不能证明时间、空间或事件互不重叠条件下的泛化能力。在合成数据上运行核心算法验证的是软件能否执行，不是论文性能或科学结论。

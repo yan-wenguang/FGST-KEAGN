@@ -1,9 +1,9 @@
-# Repository contents
+# 仓库内容
 
-The repository distributes the FGAT-FS and LLM-KEAGN core models, feature-graph construction, feature selection, losses, local knowledge provider, trainers and executable pipelines. It also includes auxiliary utilities, synthetic data, a runnable public configuration and tests.
+本仓库提供 FGAT-FS 和 LLM-KEAGN 核心模型、特征图构建、特征选择、损失函数、本地知识提供器、训练器和可执行流水线，同时包含辅助工具、合成数据、可运行的公开配置及测试。
 
-Raw study data, study-specific knowledge records, trained weights, experiment archives and paper drafts beyond the quoted overview are not distributed. The public synthetic execution is not reproduction of reported research results.
+未公开原始研究数据、研究专用知识记录、训练权重、实验归档及概述引用以外的论文草稿。公开的合成数据运行不等同于复现论文报告的研究结果。
 
-Repository maintainer: [yan-wenguang](https://github.com/yan-wenguang). No broad software or data license is inferred from public visibility.
+仓库维护者：[yan-wenguang](https://github.com/yan-wenguang)。仓库公开可见不代表自动授予广泛的软件或数据许可。
 
-Processed research inputs: see [RESEARCH_DATA.md](docs/RESEARCH_DATA.md).
+处理后的研究输入详见 [RESEARCH_DATA.md](docs/RESEARCH_DATA.md)。

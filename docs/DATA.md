@@ -1,48 +1,48 @@
-# Synthetic Data Card
+# 合成数据说明卡
 
-## Origin and intended use
+## 来源与用途
 
-`examples/synthetic.csv` is an independently generated fixture for public utility testing and a conventional classification illustration. The generator uses Python's standard-library `random.Random(91357)` and does not read real data, private statistics, study configurations or model files. It does not access external services.
+`examples/synthetic.csv` 是独立生成的测试数据，用于公开辅助工具测试和常规分类示例。生成器使用 Python 标准库的 `random.Random(91357)`，不读取真实数据、私有统计信息、研究配置或模型文件，也不访问外部服务。
 
-The fixture is not a forest-fire dataset, an anonymized study dataset, or evidence of risk-prediction performance. The generic column names deliberately do not encode private study fields.
+该数据不是森林火灾数据集、匿名化研究数据集或风险预测性能证据。通用列名有意不对应私有研究字段。
 
-## Fields and generation
+## 字段与生成方式
 
-| Field | Domain | Role |
+| 字段 | 取值范围 | 用途 |
 |---|---|---|
-| `feature_a`, `feature_b`, `feature_c` | Independent uniform draws in [-1, 1] | Baseline inputs |
-| `context_level` | Uniform draw in [0, 1] | Schema context illustration; excluded from model inputs |
-| `label` | 0 or 1 | Synthetic target |
+| `feature_a`, `feature_b`, `feature_c` | 在 [-1, 1] 内独立均匀采样 | 基线输入 |
+| `context_level` | 在 [0, 1] 内均匀采样 | 用于展示上下文结构；不作为模型输入 |
+| `label` | 0 或 1 | 合成目标 |
 
-For each row, the generator draws the three inputs, context and independent noise in that order. Noise is uniform in [-0.6, 0.6]. The target is:
+生成每一行时，依次采样三个输入、上下文和独立噪声。噪声在 [-0.6, 0.6] 内均匀分布。目标计算方式为：
 
 ```text
 label = int(1.4*feature_a - 0.9*feature_b + 0.5*feature_c + noise >= 0)
 ```
 
-The label is calculated before feature serialization rounds values. The noise is not stored as a feature. All four stored real-valued columns use six decimal places; CSV encoding is UTF-8 with an LF line ending.
+先计算标签，再在特征序列化时进行数值舍入。噪声不作为特征保存。四个实数列均保留六位小数；CSV 使用 UTF-8 编码和 LF 换行。
 
-## Identity and integrity
+## 数据标识与完整性
 
-- Rows: 240.
-- Columns: five.
-- Positive labels: 113; negative labels: 127.
-- SHA-256: `8cd27748b69d5cc03e9b2691d85c06d7a8d48814230aa82dbec451866214c4f2`.
-- Machine-readable contract: `examples/schema.json`.
-- Generator: `python -m examples.generate`.
+- 行数：240。
+- 列数：5。
+- 正类标签：113；负类标签：127。
+- SHA-256：`8cd27748b69d5cc03e9b2691d85c06d7a8d48814230aa82dbec451866214c4f2`。
+- 机器可读的数据约定：`examples/schema.json`。
+- 生成命令：`python -m examples.generate`。
 
-Regeneration confirms byte identity and refuses to overwrite an existing different fixture. The example runner verifies the declared checksum, schema and row count before training.
+重新生成时会确认字节一致性，并拒绝覆盖内容不同的现有数据文件。示例运行入口在训练前校验声明的校验码、结构和行数。
 
-## Partition and selection policy
+## 划分与选择规则
 
-The public baseline uses the explicit settings in `configs/synthetic_example.json`: seed 91357, 60% training, 20% validation and 20% test. Training and validation sizes use Python `round(n * ratio)`; test receives the remainder. In this fixture the sizes are 144/48/48.
+公开基线使用 `configs/synthetic_example.json` 中的明确配置：随机种子为 91357，训练集占 60%，验证集和测试集各占 20%。训练集和验证集大小使用 Python 的 `round(n * ratio)` 计算，其余样本分配给测试集。该数据的划分大小为 144/48/48。
 
-The splitter uses two sequential scikit-learn stratified splits. Small or imbalanced samples may make the second split infeasible even when a different three-way allocation could exist. The function reports which stage failed; it does not implement a new constrained allocation algorithm.
+划分器连续执行两次 scikit-learn 分层划分。对于较小或不平衡的样本，即使存在其他可行的三方划分方式，第二次划分仍可能无法完成。函数会报告失败阶段，不实现新的约束分配算法。
 
-The scaler and classifier fit only training rows. Validation and test are reporting-only. This example does not tune hyperparameters or thresholds, perform repeated-seed inference, or estimate uncertainty.
+标准化器和分类器仅拟合训练行。验证集和测试集只用于结果报告。该示例不调整超参数或阈值，不进行多随机种子推断，也不估计不确定性。
 
-## Limitations
+## 限制
 
-The simple target formula deliberately makes a small illustration, not a realistic benchmark. Single-seed metrics have no claimed statistical significance. Random row stratification does not demonstrate out-of-time, spatial, event or entity generalization. Synthetic fixture reproducibility does not establish reproduction of the private study.
+简单的目标公式仅用于小型示例，不构成真实基准。单随机种子的指标不具有所声明的统计显著性。按行随机分层划分不能证明跨时间、空间、事件或实体的泛化能力。合成数据的可重复生成不等同于复现私有研究。
 
-The repository's current rights statement applies; no broad data or software license is invented here.
+适用仓库当前的权利声明；不额外授予广泛的数据或软件许可。

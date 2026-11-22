@@ -1,8 +1,8 @@
-# Processed research data
+# 处理后的研究数据
 
-These five CSV files are copied byte-for-byte from the supplied `new_data.zip`. They are real processed research inputs, separate from `examples/synthetic.csv`.
+五份 CSV 从所提供的 `new_data.zip` 逐字节复制，属于真实的处理后研究输入，与 `examples/synthetic.csv` 合成数据分别管理。
 
-| File | Rows | Columns | Label counts |
+| 文件 | 行数 | 列数 | 标签数量 |
 |---|---:|---:|---|
 | [fire_preprocessed_data.csv](../data/processed/fire_preprocessed_data.csv) | 1215 | 24 | {'1': 631, '-1': 584} |
 | [algeria_wildfire_enriched_for_pipeline.csv](../data/processed/algeria_wildfire_enriched_for_pipeline.csv) | 517 | 25 | {'0': 247, '1': 270} |
@@ -10,16 +10,16 @@ These five CSV files are copied byte-for-byte from the supplied `new_data.zip`. 
 | [america_wildfire_for_pipeline.csv](../data/processed/america_wildfire_for_pipeline.csv) | 64196 | 22 | {'1': 32098, '0': 32098} |
 | [america_wildfire_horizon_for_pipeline.csv](../data/processed/america_wildfire_horizon_for_pipeline.csv) | 64196 | 24 | {'1': 32098, '0': 32098} |
 
-The target is `fire_occurred`. Exact field lists, label distributions and SHA-256 checksums are in [manifest.json](../data/processed/manifest.json). All five files were scanned for blank, nonnumeric and nonfinite values; results are recorded in that manifest. This checks serialization, not scientific correctness or label quality.
+目标字段为 `fire_occurred`。完整字段清单、标签分布和 SHA-256 校验码见 [manifest.json](../data/processed/manifest.json)。五份文件均已扫描空白值、非数值和非有限值，结果记录在该清单中。这验证的是数据序列化，不是科学正确性或标签质量。
 
-The `america_*` files include latitude/longitude, and the `algeria_*` files include X/Y fields. They have not been de-identified or coordinate-redacted. The original filenames are preserved as supplied; geographic source, publisher, licensing, label construction and preprocessing provenance were not verified from filenames. Do not infer a dataset identity or reuse permission solely from a file name.
+`america_*` 文件包含纬度和经度，`algeria_*` 文件包含 X/Y 字段。未进行去标识化或坐标脱敏。文件名按原样保留；未根据文件名核实地理来源、发布者、许可、标签构建方式或预处理来源。不能仅凭文件名判断数据集身份或复用权限。
 
-Raw source files, the location-enriched source CSV, trained weights, row-level predictions and experiment artifacts are not included in this data release. The two `algeria_*` files and two `america_*` files are variants, not independent datasets to concatenate automatically.
+本次数据发布不包含原始来源文件、位置增强的来源 CSV、训练权重、逐行预测或实验产物。两份 `algeria_*` 文件及两份 `america_*` 文件属于不同处理变体，不能自动视为独立数据集拼接。
 
-## Execute on the primary processed input
+## 使用主数据运行
 
 ```bash
 python -m src.pipelines.run_full_pipeline --config configs/processed_primary.yaml
 ```
 
-This configuration connects the primary processed CSV to the released two-stage implementation. It uses three epochs as an execution smoke check and fallback knowledge priors. It is not the private final paper configuration and does not establish reproduction of published metrics. Increase epochs and supply documented knowledge records for a separately specified experiment.
+该配置将主数据 CSV 接入已发布的两阶段实现，采用三个训练轮次进行基本运行检查，并使用回退知识先验。这不是论文最终的私有配置，不能据此认定已复现发表的指标。如需开展另行明确的实验，请增加训练轮次并提供有记录依据的知识信息。

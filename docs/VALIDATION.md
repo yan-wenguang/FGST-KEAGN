@@ -1,5 +1,5 @@
-# Validation records
+# 验证记录
 
-Before repository recreation, the same core source passed dependency checks, 44 tests, synthetic fixture generation, the auxiliary baseline and the full three-epoch core pipeline on Python 3.10 and 3.12 with PyTorch 2.11.0. Both environments selected feature_a and feature_c; synthetic stage-two test AUC was 0.4878. Those historical CI records belonged to the previous repository. New-repository CI results must be checked separately.
+仓库重建之前，同一份核心源码在 Python 3.10 和 3.12、PyTorch 2.11.0 环境中通过了依赖检查、44 项测试、合成数据生成、辅助基线及完整的三个轮次核心流水线运行。两个环境均选择了 feature_a 和 feature_c，合成数据上的第二阶段测试 AUC 为 0.4878。这些历史 CI 记录属于原仓库，新仓库的 CI 结果需要单独核验。
 
-Five processed CSV inputs retain their source bytes. Checksums, dimensions, label counts and numeric completeness checks are recorded in data/processed/manifest.json. Real-data paper-result reproduction was not performed during this release.
+五份处理后的 CSV 保留来源文件字节。校验码、数据维度、标签数量和数值完整性检查记录在 data/processed/manifest.json。本次发布未进行基于真实数据的论文结果复现。

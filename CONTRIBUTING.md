@@ -1,5 +1,5 @@
-# Contributions
+# 贡献说明
 
-Changes should document their effect on the core algorithm or auxiliary interfaces and include relevant validation. Do not add credentials, personal data or study datasets without an explicit release decision. Keep generated model artifacts outside version control.
+修改应说明对核心算法或辅助接口的影响，并提供相应验证。未经明确的发布决定，不应添加凭据、个人数据或研究数据集。生成的模型产物应保留在版本控制之外。
 
-The repository currently records yan-wenguang as its maintainer. Publication author metadata is handled separately from code ownership.
+仓库当前维护者为 yan-wenguang。论文作者信息与代码所有权分别管理。
