@@ -1,0 +1,22 @@
+# Only reviewed source, documentation, tests and synthetic fixtures are tracked.
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.DS_Store
+.env
+.env.*
+*.log
+*.pt
+*.pth
+*.pkl
+*.pickle
+*.npz
+*.npy
+*.zip
+private/
+artifacts/
+outputs/
+*.egg-info/
+build/
+dist/

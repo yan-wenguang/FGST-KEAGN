@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=75.8.2,<76", "wheel>=0.45.1,<0.46"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fgst-keagn-support"
+version = "0.1.0"
+description = "Selected supporting utilities and synthetic examples associated with FGST-KEAGN."
+readme = "README.md"
+requires-python = ">=3.9,<3.13"
+dependencies = [
+  "numpy==2.0.2",
+  "pandas==2.3.3",
+  "scikit-learn==1.6.1",
+  "scipy==1.13.1",
+  "PyYAML==6.0.3",
+]
+
+[project.urls]
+Repository = "https://github.com/yan-wenguang/FGST-KEAGN"
+
+[tool.setuptools.packages.find]
+where = ["src"]

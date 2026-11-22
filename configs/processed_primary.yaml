@@ -1,0 +1,51 @@
+seed: 42
+data:
+  csv_path: data/processed/fire_preprocessed_data.csv
+  label_column: fire_occurred
+  train_ratio: 0.60
+  val_ratio: 0.20
+  test_ratio: 0.20
+  dynamic_context_columns:
+    - temperature_2m_max
+    - temperature_2m_min
+    - temperature_2m_mean
+    - precipitation_sum
+    - relative_humidity_2m_max
+    - relative_humidity_2m_min
+    - relative_humidity_2m_mean
+    - surface_pressure_mean
+    - shortwave_radiation_sum
+    - cloudcover_mean
+stage1:
+  num_heads: 2
+  hidden_dim: 8
+  dropout: 0.10
+  alpha_balance: 0.55
+  temperature: 0.25
+  sparse_weight: 0.006
+  learning_rate: 0.003
+  weight_decay: 0.0001
+  epochs: 3
+  max_features: 9
+  min_features: 4
+  redundancy_penalty: 0.50
+  mi_bins: 6
+  synergy_cv_max_iter: 100
+stage2:
+  hidden_dim: 16
+  context_dim: 8
+  learning_rate: 0.002
+  weight_decay: 0.0001
+  epochs: 3
+  batch_size: 64
+  align_weight: 0.10
+  context_weight: 0.05
+  context_kernel_gamma: 0.75
+knowledge:
+  feature_metadata_path: configs/core_feature_metadata.json
+  feature_cards_path: artifacts/processed_primary/feature_cards.json
+  priors_path: configs/core_demo_priors.json
+artifacts:
+  stage1_dir: artifacts/processed_primary/stage1
+  stage2_dir: artifacts/processed_primary/stage2
+  reports_dir: artifacts/processed_primary/reports
