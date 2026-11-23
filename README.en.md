@@ -2,7 +2,7 @@
 
 [中文](README.md) | **English**
 
-Core algorithm implementation for the two-stage forest-fire risk prediction framework: **FGAT-FS** feature selection and **LLM-KEAGN** knowledge-enhanced adaptive gating.
+Explainable Forest Fire Risk Prediction: Unifying Structural Feature Selection and Knowledge Enhancement
 
 Repository maintainer: [yan-wenguang](https://github.com/yan-wenguang).
 
